@@ -4,7 +4,7 @@ import { FaDesktop, FaMobileAlt, FaCode, FaWifi, FaGlobeAmericas } from "react-i
 import { IoMdPlanet } from "react-icons/io";
 import { HiDevicePhone } from "react-icons/hi";
 import { Helmet } from "react-helmet";
-import ReactTooltip from "react-tooltip";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 import { ToastContainer, toast } from "react-toastify";
 import { isMobile, isTablet, isDesktop, browserName, osName } from "react-device-detect";
 
