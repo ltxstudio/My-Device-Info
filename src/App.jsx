@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { isMobile, isTablet, isDesktop, browserName, osName, osVersion } from "react-device-detect";
-import { FaWifi, FaDesktop, FaMobileAlt, FaInfoCircle, FaLocationArrow, FaBatteryFull, FaNetworkWired, FaMemory, FaMicrochip, FaRegClock, FaGlobe } from "react-icons/fa";
+import { FaWifi, FaDesktop, FaMobileAlt, FaInfoCircle, FaLocationArrow, FaBatteryFull, FaNetworkWired, FaGlobe } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
-import { Tooltip as ReactTooltip } from "react-tooltip";
 import axios from "axios";
 import { Helmet } from "react-helmet";
-import "react-toastify/dist/ReactToastify.css"; // Import the toast CSS 
+import "react-toastify/dist/ReactToastify.css"; // Import the toast CSS
 import LoadMoreInfo from "./components/LoadMoreInfo"; // Import the new component
 
 const App = () => {
@@ -213,36 +212,9 @@ const App = () => {
             {/* Load More Info Button */}
             {showMoreInfo && (
               <>
-                <div className="flex items-center space-x-3">
-                  <FaMemory className="text-2xl text-gray-600" />
-                  <div className="text-lg">
-                    <strong>Device Memory:</strong> {deviceInfo.deviceMemory || "Unknown"}
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-3">
-                  <FaMicrochip className="text-2xl text-gray-600" />
-                  <div className="text-lg">
-                    <strong>CPU Cores:</strong> {deviceInfo.cpuCores || "Unknown"}
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-3">
-                  <FaRegClock className="text-2xl text-gray-600" />
-                  <div className="text-lg">
-                    <strong>Screen Orientation:</strong> {deviceInfo.screenOrientation || "Unknown"}
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-3">
-                  <FaRegClock className="text-2xl text-gray-600" />
-                  <div className="text-lg">
-                    <strong>Time Zone:</strong> {deviceInfo.timeZone}
-                  </div>
-                </div>
+                <LoadMoreInfo deviceInfo={deviceInfo} />
               </>
             )}
-
           </div>
 
           <div className="mt-6 text-center">
@@ -253,8 +225,6 @@ const App = () => {
               {showMoreInfo ? "Show Less" : "Load More"}
             </button>
           </div>
-          {showMoreInfo && <LoadMoreInfo deviceInfo={deviceInfo} />}
-
         </div>
 
         <ToastContainer />
