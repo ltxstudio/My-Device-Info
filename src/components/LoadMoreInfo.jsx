@@ -53,7 +53,7 @@ const LoadMoreInfo = ({ deviceInfo }) => {
   }, []);
 
   return (
-    <div className="mt-6 space-y-4">
+    <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* Device Memory */}
       <div className="flex items-center space-x-3">
         <FaMemory className="text-2xl text-gray-600" />
@@ -82,7 +82,7 @@ const LoadMoreInfo = ({ deviceInfo }) => {
       <div className="flex items-center space-x-3">
         <FaRegClock className="text-2xl text-gray-600" />
         <div className="text-lg">
-          <strong>Time Zone:</strong> {deviceInfo.timeZone}
+          <strong>Time Zone:</strong> {deviceInfo.timeZone || "Unknown"}
         </div>
       </div>
 
