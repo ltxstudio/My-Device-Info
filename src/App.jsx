@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { isMobile, isTablet, isDesktop, browserName, osName, osVersion } from "react-device-detect";
 import { FaWifi, FaDesktop, FaMobileAlt, FaInfoCircle, FaLocationArrow, FaBatteryFull, FaNetworkWired, FaMemory, FaMicrochip, FaRegClock, FaGlobe } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
-import { Tooltip as ReactTooltip } from "react-tooltip";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import "react-toastify/dist/ReactToastify.css"; // Import the toast CSS 
@@ -135,13 +134,13 @@ const App = () => {
         <meta name="twitter:image" content="https://your-site.com/your-image.jpg" />
       </Helmet>
 
-      <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
+      <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-6 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl w-full p-6 bg-white rounded-xl shadow-lg">
           <h1 className="text-4xl font-bold text-center text-blue-600 mb-6">
             Device Information
           </h1>
 
-          <div className="space-y-4">
+          <div className="space-y-6">
             {/* Basic Device Info */}
             <div className="flex items-center space-x-3">
               <FaDesktop className="text-2xl text-gray-600" />
