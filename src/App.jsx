@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { FaDesktop, FaMobileAlt, FaMoon, FaSun, FaWifi } from "react-icons/fa";
 import { Helmet } from "react-helmet";
 import { ToastContainer, toast } from "react-toastify";
@@ -8,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
 function App() {
+  // Initializing state variables
   const [deviceInfo, setDeviceInfo] = useState({
     userAgent: "",
     os: "",
@@ -24,12 +24,14 @@ function App() {
     cpuCores: "",
     batteryInfo: null,
   });
+
   const [ipInfo, setIpInfo] = useState(null);
   const [currentTime, setCurrentTime] = useState("");
   const [isDarkMode, setIsDarkMode] = useState(
     JSON.parse(localStorage.getItem("isDarkMode")) || false
   );
 
+  // UseEffect to fetch data when the component mounts
   useEffect(() => {
     // Set device details
     setDeviceInfo({
@@ -52,11 +54,8 @@ function App() {
       cpuCores: navigator.hardwareConcurrency || "Unknown",
     });
 
-    // Fetch IP details
-    axios
-      .get("https://ip-api.com/json")
-      .then((res) => setIpInfo(res.data))
-      .catch(() => setIpInfo(null));
+    // Fetch IP details using fetch API
+    fetchIpDetails();
 
     // Get battery info
     if ("getBattery" in navigator) {
@@ -79,7 +78,7 @@ function App() {
       }));
     window.addEventListener("resize", handleResize);
 
-    // Update time dynamically
+    // Update time dynamically every second
     const interval = setInterval(() => setCurrentTime(new Date().toLocaleString()), 1000);
 
     return () => {
@@ -87,6 +86,21 @@ function App() {
       clearInterval(interval);
     };
   }, []);
+
+  // Fetch IP details using the fetch API
+  const fetchIpDetails = () => {
+    fetch("https://ip-api.com/json")
+      .then((response) => response.json())
+      .then((data) => {
+        setIpInfo(data);
+        toast.success("IP information loaded!");
+      })
+      .catch((error) => {
+        console.error("Error fetching IP details:", error);
+        toast.error("Error fetching IP details.");
+        setIpInfo(null);
+      });
+  };
 
   // Toggle Dark Mode
   const toggleDarkMode = () => {
@@ -157,6 +171,13 @@ function App() {
                 <strong>Current Time:</strong> {currentTime}
               </p>
             </div>
+            {/* Button to refresh IP Info */}
+            <button
+              onClick={fetchIpDetails}
+              className="mt-4 py-2 px-4 bg-blue-600 text-white rounded-full hover:bg-blue-500 transition"
+            >
+              Refresh IP Info
+            </button>
           </div>
         </div>
       </main>
