@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { isMobile, isTablet, isDesktop, browserName, osName, osVersion } from "react-device-detect";
-import { FaWifi, FaDesktop, FaMobileAlt, FaInfoCircle, FaLocationArrow, FaBatteryFull, FaNetworkWired, FaMemory, FaCpu, FaRegClock } from "react-icons/fa";
+import { FaWifi, FaDesktop, FaMobileAlt, FaInfoCircle, FaLocationArrow, FaBatteryFull, FaNetworkWired, FaMemory, FaMicrochip, FaRegClock, FaGlobe } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import axios from "axios";
@@ -21,6 +21,8 @@ const App = () => {
     pixelRatio: window.devicePixelRatio || "Unknown",
     screenOrientation: null,
     timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Unknown",
+    userAgent: navigator.userAgent || "Unknown",
+    ipLocation: null,
   });
 
   useEffect(() => {
@@ -31,6 +33,18 @@ const App = () => {
           ...prevState,
           ip: response.data.ip,
         }));
+
+        // Fetch IP location information using IP Geolocation API
+        axios.get(`https://ipinfo.io/${response.data.ip}/json`)
+          .then(ipResponse => {
+            setDeviceInfo(prevState => ({
+              ...prevState,
+              ipLocation: `${ipResponse.data.city}, ${ipResponse.data.country}`,
+            }));
+          })
+          .catch(() => {
+            toast.error("Failed to fetch IP location!");
+          });
       })
       .catch(() => {
         toast.error("Failed to fetch IP address!");
@@ -138,6 +152,22 @@ const App = () => {
               </div>
             </div>
 
+            {/* IP Location */}
+            <div className="flex items-center space-x-3">
+              <FaGlobe className="text-2xl text-gray-600" />
+              <div className="text-lg">
+                <strong>IP Location:</strong> {deviceInfo.ipLocation || "Fetching..."}
+              </div>
+            </div>
+
+            {/* User Agent */}
+            <div className="flex items-center space-x-3">
+              <FaInfoCircle className="text-2xl text-gray-600" />
+              <div className="text-lg">
+                <strong>User Agent:</strong> {deviceInfo.userAgent}
+              </div>
+            </div>
+
             {/* Browser */}
             <div className="flex items-center space-x-3">
               <FaInfoCircle className="text-2xl text-gray-600" />
@@ -196,7 +226,7 @@ const App = () => {
 
             {/* CPU Cores */}
             <div className="flex items-center space-x-3">
-              <FaCpu className="text-2xl text-gray-600" />
+              <FaMicrochip className="text-2xl text-gray-600" />
               <div className="text-lg">
                 <strong>CPU Cores:</strong> {deviceInfo.cpuCores || "Unknown"}
               </div>
