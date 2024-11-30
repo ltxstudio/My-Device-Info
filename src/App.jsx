@@ -5,7 +5,8 @@ import { ToastContainer, toast } from "react-toastify";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import axios from "axios";
 import { Helmet } from "react-helmet";
-import "react-toastify/dist/ReactToastify.css"; // Import the toast CSS
+import "react-toastify/dist/ReactToastify.css"; // Import the toast CSS 
+import LoadMoreInfo from "./components/LoadMoreInfo"; // Import the new component
 
 const App = () => {
   const [deviceInfo, setDeviceInfo] = useState({
@@ -24,6 +25,8 @@ const App = () => {
     userAgent: navigator.userAgent || "Unknown",
     ipLocation: null,
   });
+
+  const [showMoreInfo, setShowMoreInfo] = useState(false); // State for toggling additional info visibility
 
   useEffect(() => {
     // Fetch IP address using an API
@@ -127,7 +130,7 @@ const App = () => {
           </h1>
 
           <div className="space-y-4">
-            {/* Device Type */}
+            {/* Basic Device Info */}
             <div className="flex items-center space-x-3">
               <FaDesktop className="text-2xl text-gray-600" />
               <div className="text-lg">
@@ -144,7 +147,6 @@ const App = () => {
               </div>
             </div>
 
-            {/* IP Address */}
             <div className="flex items-center space-x-3">
               <FaWifi className="text-2xl text-gray-600" />
               <div className="text-lg">
@@ -152,7 +154,6 @@ const App = () => {
               </div>
             </div>
 
-            {/* IP Location */}
             <div className="flex items-center space-x-3">
               <FaGlobe className="text-2xl text-gray-600" />
               <div className="text-lg">
@@ -160,7 +161,6 @@ const App = () => {
               </div>
             </div>
 
-            {/* User Agent */}
             <div className="flex items-center space-x-3">
               <FaInfoCircle className="text-2xl text-gray-600" />
               <div className="text-lg">
@@ -168,7 +168,6 @@ const App = () => {
               </div>
             </div>
 
-            {/* Browser */}
             <div className="flex items-center space-x-3">
               <FaInfoCircle className="text-2xl text-gray-600" />
               <div className="text-lg">
@@ -176,7 +175,6 @@ const App = () => {
               </div>
             </div>
 
-            {/* OS */}
             <div className="flex items-center space-x-3">
               <FaInfoCircle className="text-2xl text-gray-600" />
               <div className="text-lg">
@@ -184,7 +182,6 @@ const App = () => {
               </div>
             </div>
 
-            {/* Screen Size */}
             <div className="flex items-center space-x-3">
               <FaMobileAlt className="text-2xl text-gray-600" />
               <div className="text-lg">
@@ -192,7 +189,6 @@ const App = () => {
               </div>
             </div>
 
-            {/* Battery Info */}
             <div className="flex items-center space-x-3">
               <FaBatteryFull className="text-2xl text-gray-600" />
               <div className="text-lg">
@@ -200,7 +196,6 @@ const App = () => {
               </div>
             </div>
 
-            {/* Network Type */}
             <div className="flex items-center space-x-3">
               <FaNetworkWired className="text-2xl text-gray-600" />
               <div className="text-lg">
@@ -208,7 +203,6 @@ const App = () => {
               </div>
             </div>
 
-            {/* Geolocation */}
             <div className="flex items-center space-x-3">
               <FaLocationArrow className="text-2xl text-gray-600" />
               <div className="text-lg">
@@ -216,57 +210,50 @@ const App = () => {
               </div>
             </div>
 
-            {/* Device Memory */}
-            <div className="flex items-center space-x-3">
-              <FaMemory className="text-2xl text-gray-600" />
-              <div className="text-lg">
-                <strong>Device Memory:</strong> {deviceInfo.deviceMemory || "Unknown"}
-              </div>
-            </div>
+            {/* Load More Info Button */}
+            {showMoreInfo && (
+              <>
+                <div className="flex items-center space-x-3">
+                  <FaMemory className="text-2xl text-gray-600" />
+                  <div className="text-lg">
+                    <strong>Device Memory:</strong> {deviceInfo.deviceMemory || "Unknown"}
+                  </div>
+                </div>
 
-            {/* CPU Cores */}
-            <div className="flex items-center space-x-3">
-              <FaMicrochip className="text-2xl text-gray-600" />
-              <div className="text-lg">
-                <strong>CPU Cores:</strong> {deviceInfo.cpuCores || "Unknown"}
-              </div>
-            </div>
+                <div className="flex items-center space-x-3">
+                  <FaMicrochip className="text-2xl text-gray-600" />
+                  <div className="text-lg">
+                    <strong>CPU Cores:</strong> {deviceInfo.cpuCores || "Unknown"}
+                  </div>
+                </div>
 
-            {/* Pixel Ratio */}
-            <div className="flex items-center space-x-3">
-              <FaInfoCircle className="text-2xl text-gray-600" />
-              <div className="text-lg">
-                <strong>Pixel Ratio:</strong> {deviceInfo.pixelRatio}
-              </div>
-            </div>
+                <div className="flex items-center space-x-3">
+                  <FaRegClock className="text-2xl text-gray-600" />
+                  <div className="text-lg">
+                    <strong>Screen Orientation:</strong> {deviceInfo.screenOrientation || "Unknown"}
+                  </div>
+                </div>
 
-            {/* Screen Orientation */}
-            <div className="flex items-center space-x-3">
-              <FaInfoCircle className="text-2xl text-gray-600" />
-              <div className="text-lg">
-                <strong>Screen Orientation:</strong> {deviceInfo.screenOrientation || "Unknown"}
-              </div>
-            </div>
+                <div className="flex items-center space-x-3">
+                  <FaRegClock className="text-2xl text-gray-600" />
+                  <div className="text-lg">
+                    <strong>Time Zone:</strong> {deviceInfo.timeZone}
+                  </div>
+                </div>
+              </>
+            )}
 
-            {/* Time Zone */}
-            <div className="flex items-center space-x-3">
-              <FaRegClock className="text-2xl text-gray-600" />
-              <div className="text-lg">
-                <strong>Time Zone:</strong> {deviceInfo.timeZone}
-              </div>
-            </div>
           </div>
 
-          {/* Device Info Buttons */}
-          <div className="mt-6 space-x-4 text-center">
+          <div className="mt-6 text-center">
             <button
+              onClick={() => setShowMoreInfo(!showMoreInfo)}
               className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-              data-tip="More device details"
             >
-              More Info
+              {showMoreInfo ? "Show Less" : "Load More"}
             </button>
-            <ReactTooltip place="top" effect="solid" />
           </div>
+
         </div>
 
         <ToastContainer />
