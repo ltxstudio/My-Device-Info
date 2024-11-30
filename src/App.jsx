@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { isMobile, isTablet, isDesktop, browserName, osName, osVersion, isChrome, isFirefox } from "react-device-detect";
-import { FaWifi, FaDesktop, FaMobileAlt, FaInfoCircle, FaLocationArrow, FaBatteryFull, FaNetworkWired } from "react-icons/fa";
+import { isMobile, isTablet, isDesktop, browserName, osName, osVersion } from "react-device-detect";
+import { FaWifi, FaDesktop, FaMobileAlt, FaInfoCircle, FaLocationArrow, FaBatteryFull, FaNetworkWired, FaMemory, FaCpu, FaRegClock } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import axios from "axios";
@@ -16,6 +16,11 @@ const App = () => {
     battery: null,
     networkType: null,
     geolocation: null,
+    deviceMemory: null,
+    cpuCores: null,
+    pixelRatio: window.devicePixelRatio || "Unknown",
+    screenOrientation: null,
+    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Unknown",
   });
 
   useEffect(() => {
@@ -63,6 +68,32 @@ const App = () => {
           toast.error("Failed to fetch geolocation!");
         }
       );
+    }
+
+    // Get Device Memory (RAM)
+    const memory = navigator.deviceMemory;
+    if (memory) {
+      setDeviceInfo(prevState => ({
+        ...prevState,
+        deviceMemory: `${memory} GB`,
+      }));
+    }
+
+    // Get CPU Cores
+    const cpuCores = navigator.hardwareConcurrency;
+    if (cpuCores) {
+      setDeviceInfo(prevState => ({
+        ...prevState,
+        cpuCores: cpuCores,
+      }));
+    }
+
+    // Get Screen Orientation
+    if (screen.orientation) {
+      setDeviceInfo(prevState => ({
+        ...prevState,
+        screenOrientation: screen.orientation.type,
+      }));
     }
 
     const notify = () => toast.info("Device Info Loaded!");
@@ -152,6 +183,46 @@ const App = () => {
               <FaLocationArrow className="text-2xl text-gray-600" />
               <div className="text-lg">
                 <strong>Geolocation:</strong> {deviceInfo.geolocation || "Fetching..."}
+              </div>
+            </div>
+
+            {/* Device Memory */}
+            <div className="flex items-center space-x-3">
+              <FaMemory className="text-2xl text-gray-600" />
+              <div className="text-lg">
+                <strong>Device Memory:</strong> {deviceInfo.deviceMemory || "Unknown"}
+              </div>
+            </div>
+
+            {/* CPU Cores */}
+            <div className="flex items-center space-x-3">
+              <FaCpu className="text-2xl text-gray-600" />
+              <div className="text-lg">
+                <strong>CPU Cores:</strong> {deviceInfo.cpuCores || "Unknown"}
+              </div>
+            </div>
+
+            {/* Pixel Ratio */}
+            <div className="flex items-center space-x-3">
+              <FaInfoCircle className="text-2xl text-gray-600" />
+              <div className="text-lg">
+                <strong>Pixel Ratio:</strong> {deviceInfo.pixelRatio}
+              </div>
+            </div>
+
+            {/* Screen Orientation */}
+            <div className="flex items-center space-x-3">
+              <FaInfoCircle className="text-2xl text-gray-600" />
+              <div className="text-lg">
+                <strong>Screen Orientation:</strong> {deviceInfo.screenOrientation || "Unknown"}
+              </div>
+            </div>
+
+            {/* Time Zone */}
+            <div className="flex items-center space-x-3">
+              <FaRegClock className="text-2xl text-gray-600" />
+              <div className="text-lg">
+                <strong>Time Zone:</strong> {deviceInfo.timeZone}
               </div>
             </div>
           </div>
