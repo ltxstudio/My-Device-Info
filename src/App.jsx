@@ -78,7 +78,8 @@ function App() {
 
     // Battery Information
     if ("getBattery" in navigator) {
-      navigator.getBattery()
+      navigator
+        .getBattery()
         .then((battery) =>
           setBatteryInfo({
             level: battery.level,
