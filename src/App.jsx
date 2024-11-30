@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { FaDesktop, FaMobileAlt, FaCode, FaWifi } from "react-icons/fa";
+import { FaDesktop, FaMobileAlt, FaCode, FaWifi, FaGlobeAmericas } from "react-icons/fa";
 import { IoMdPlanet } from "react-icons/io";
 import { HiDevicePhone } from "react-icons/hi";
 
@@ -11,6 +11,14 @@ function App() {
   const [ipInfo, setIpInfo] = useState(null);
   const [screenResolution, setScreenResolution] = useState("");
   const [browser, setBrowser] = useState("");
+  const [timezone, setTimezone] = useState("");
+  const [language, setLanguage] = useState("");
+  const [connectionType, setConnectionType] = useState("");
+  const [networkInfo, setNetworkInfo] = useState("");
+  const [batteryInfo, setBatteryInfo] = useState(null);
+  const [cpuInfo, setCpuInfo] = useState("");
+  const [screenOrientation, setScreenOrientation] = useState("");
+  const [deviceMemory, setDeviceMemory] = useState("");
 
   useEffect(() => {
     // Get the user agent string from the browser
@@ -57,6 +65,44 @@ function App() {
 
     // Set screen resolution
     setScreenResolution(`${window.screen.width} x ${window.screen.height}`);
+
+    // Get the user's timezone
+    setTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone);
+
+    // Get the user's language
+    setLanguage(navigator.language || navigator.userLanguage);
+
+    // Check connection type (e.g., Wi-Fi, cellular)
+    if (navigator.connection) {
+      setNetworkInfo(navigator.connection.effectiveType);
+    } else {
+      setNetworkInfo("Not Available");
+    }
+
+    // Detect online/offline status
+    setConnectionType(navigator.onLine ? "Online" : "Offline");
+
+    // Battery information
+    if ("getBattery" in navigator) {
+      navigator.getBattery().then(battery => {
+        setBatteryInfo(battery);
+      });
+    }
+
+    // CPU Information
+    if (navigator.hardwareConcurrency) {
+      setCpuInfo(navigator.hardwareConcurrency); // Number of logical CPUs
+    }
+
+    // Screen Orientation
+    if (window.screen.orientation) {
+      setScreenOrientation(window.screen.orientation.type);
+    }
+
+    // Device Memory
+    if (navigator.deviceMemory) {
+      setDeviceMemory(navigator.deviceMemory); // Amount of device memory in GB
+    }
   }, []);
 
   return (
@@ -92,6 +138,12 @@ function App() {
 
           <div className="text-lg text-gray-700 font-semibold">
             <p>Screen Resolution: <span className="font-normal">{screenResolution}</span></p>
+            <p>Timezone: <span className="font-normal">{timezone}</span></p>
+            <p>Language: <span className="font-normal">{language}</span></p>
+            <p>Connection: <span className="font-normal">{connectionType}</span></p>
+            <p>Network Info: <span className="font-normal">{networkInfo}</span></p>
+            <p>Screen Orientation: <span className="font-normal">{screenOrientation}</span></p>
+            <p>Device Memory: <span className="font-normal">{deviceMemory} GB</span></p>
           </div>
 
           <div className="text-lg text-gray-700 font-semibold">
@@ -100,11 +152,31 @@ function App() {
                 <p>IP Address: <span className="font-normal">{ipInfo.query}</span></p>
                 <p>Location: <span className="font-normal">{ipInfo.city}, {ipInfo.country}</span></p>
                 <p>ISP: <span className="font-normal">{ipInfo.isp}</span></p>
+                <p>Region: <span className="font-normal">{ipInfo.regionName}</span></p>
+                <div className="flex items-center justify-center">
+                  <FaGlobeAmericas className="text-indigo-500 text-3xl" />
+                  <p className="text-lg font-semibold">{ipInfo.country}</p>
+                </div>
               </div>
             ) : (
               <p>Loading IP Info...</p>
             )}
           </div>
+
+          <div className="text-lg text-gray-700 font-semibold">
+            {batteryInfo && (
+              <div>
+                <p>Battery Level: <span className="font-normal">{Math.round(batteryInfo.level * 100)}%</span></p>
+                <p>Charging: <span className="font-normal">{batteryInfo.charging ? "Yes" : "No"}</span></p>
+              </div>
+            )}
+          </div>
+
+          {cpuInfo && (
+            <div className="text-lg text-gray-700 font-semibold">
+              <p>CPU Cores: <span className="font-normal">{cpuInfo}</span></p>
+            </div>
+          )}
         </div>
 
         <div className="space-x-4 flex justify-center">
