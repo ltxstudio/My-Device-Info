@@ -33,12 +33,13 @@ function App() {
   const [deviceMemory, setDeviceMemory] = useState("");
   const [colorDepth, setColorDepth] = useState("");
   const [currentTime, setCurrentTime] = useState("");
+  const [cpuCores, setCpuCores] = useState("");
   const [isDarkMode, setIsDarkMode] = useState(
     JSON.parse(localStorage.getItem("isDarkMode")) || false
   );
 
   useEffect(() => {
-    // Fetch basic device details
+    // Set basic device details
     setUserAgent(navigator.userAgent);
     setDeviceType(isMobile ? "Mobile" : isTablet ? "Tablet" : "Desktop");
     setOs(osName);
@@ -48,17 +49,29 @@ function App() {
     setLanguage(navigator.language || navigator.userLanguage);
     setColorDepth(`${window.screen.colorDepth}-bit`);
     setDeviceMemory(navigator.deviceMemory || "Unknown");
+    setCpuCores(navigator.hardwareConcurrency || "Unknown");
     setConnectionType(navigator.onLine ? "Online" : "Offline");
 
-    // Fetch IP Info
+    // Fetch IP Information
     axios
-      .get("http://ip-api.com/json")
-      .then((response) => setIpInfo(response.data))
-      .catch((error) => console.error("Error fetching IP info:", error));
+      .get("https://ip-api.com/json")
+      .then((response) => {
+        console.log("IP Info Response:", response.data); // Debug
+        setIpInfo(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching IP info:", error);
+        setIpInfo(null);
+      });
 
     // Network Information
     if (navigator.connection) {
-      setNetworkInfo(navigator.connection.effectiveType || "Unknown");
+      const { effectiveType, downlink, rtt } = navigator.connection;
+      setNetworkInfo(
+        `Type: ${effectiveType || "Unknown"}, Downlink: ${
+          downlink || "Unknown"
+        } Mbps, RTT: ${rtt || "Unknown"} ms`
+      );
     } else {
       setNetworkInfo("Not Available");
     }
@@ -136,6 +149,7 @@ function App() {
               <p><strong>Resolution:</strong> {screenResolution}</p>
               <p><strong>Window Size:</strong> {windowSize}</p>
               <p><strong>Memory:</strong> {deviceMemory} GB</p>
+              <p><strong>CPU Cores:</strong> {cpuCores}</p>
               <p><strong>Color Depth:</strong> {colorDepth}</p>
               <p><strong>Timezone:</strong> {timezone}</p>
               <p><strong>Language:</strong> {language}</p>
@@ -150,15 +164,17 @@ function App() {
               )}
             </div>
 
-            {ipInfo && (
+            {ipInfo ? (
               <div className="mt-6">
                 <h4 className="font-semibold">IP Information</h4>
                 <p><strong>IP:</strong> {ipInfo.query}</p>
-                <p>
-                  <strong>Location:</strong> {ipInfo.city}, {ipInfo.regionName},{" "}
-                  {ipInfo.country}
-                </p>
+                <p><strong>Location:</strong> {ipInfo.city}, {ipInfo.regionName}, {ipInfo.country}</p>
+                <p><strong>ISP:</strong> {ipInfo.isp}</p>
+                <p><strong>Latitude:</strong> {ipInfo.lat}</p>
+                <p><strong>Longitude:</strong> {ipInfo.lon}</p>
               </div>
+            ) : (
+              <p>Fetching IP information...</p>
             )}
           </div>
         </div>
