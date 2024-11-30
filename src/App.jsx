@@ -3,6 +3,12 @@ import axios from "axios";
 import { FaDesktop, FaMobileAlt, FaCode, FaWifi, FaGlobeAmericas } from "react-icons/fa";
 import { IoMdPlanet } from "react-icons/io";
 import { HiDevicePhone } from "react-icons/hi";
+import { Helmet } from "react-helmet";
+import ReactTooltip from "react-tooltip";
+import { ToastContainer, toast } from "react-toastify";
+import { isMobile, isTablet, isDesktop, browserName, osName } from "react-device-detect";
+
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [userAgent, setUserAgent] = useState("");
@@ -25,36 +31,14 @@ function App() {
     const agent = navigator.userAgent;
     setUserAgent(agent);
 
-    // Detect device type (Mobile/Desktop)
-    if (/mobile/i.test(agent)) {
-      setDeviceType("Mobile");
-    } else {
-      setDeviceType("Desktop");
-    }
+    // Set device type
+    setDeviceType(isMobile ? "Mobile" : isTablet ? "Tablet" : "Desktop");
 
-    // Detect OS from the user agent string
-    if (/Windows NT/i.test(agent)) {
-      setOs("Windows");
-    } else if (/Mac OS/i.test(agent)) {
-      setOs("MacOS");
-    } else if (/Linux/i.test(agent)) {
-      setOs("Linux");
-    } else {
-      setOs("Unknown OS");
-    }
+    // Detect OS using react-device-detect
+    setOs(osName);
 
-    // Detect Browser from user agent string
-    if (/chrome|chromium|crios/i.test(agent)) {
-      setBrowser("Google Chrome");
-    } else if (/firefox|fxios/i.test(agent)) {
-      setBrowser("Mozilla Firefox");
-    } else if (/safari/i.test(agent) && !/chrome/i.test(agent)) {
-      setBrowser("Safari");
-    } else if (/edge/i.test(agent)) {
-      setBrowser("Microsoft Edge");
-    } else {
-      setBrowser("Unknown Browser");
-    }
+    // Detect Browser using react-device-detect
+    setBrowser(browserName);
 
     // Fetch IP info using ip-api service
     axios.get("http://ip-api.com/json")
@@ -105,8 +89,18 @@ function App() {
     }
   }, []);
 
+  // Function to handle the user agent copy and toast notification
+  const handleCopyUserAgent = () => {
+    navigator.clipboard.writeText(userAgent);
+    toast.success("User Agent Copied to Clipboard!");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500 flex items-center justify-center">
+      <Helmet>
+        <title>Device Info Hub | User Agent</title>
+      </Helmet>
+
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-3xl w-full text-center space-y-6">
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">What Is My User Agent?</h1>
 
@@ -181,13 +175,17 @@ function App() {
 
         <div className="space-x-4 flex justify-center">
           <button
-            onClick={() => alert("You can copy the user agent or inspect it further.")}
+            onClick={handleCopyUserAgent}
+            data-tip="Click to copy the User Agent"
             className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
           >
             Copy User Agent
           </button>
+          <ReactTooltip />
         </div>
       </div>
+
+      <ToastContainer />
     </div>
   );
 }
