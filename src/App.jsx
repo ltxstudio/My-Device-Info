@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { isMobile, isTablet, isDesktop, browserName, osName, osVersion } from "react-device-detect";
-import { FaWifi, FaDesktop, FaMobileAlt, FaInfoCircle, FaLocationArrow, FaBatteryFull, FaNetworkWired, FaGlobe } from "react-icons/fa";
+import { FaWifi, FaDesktop, FaMobileAlt, FaInfoCircle, FaLocationArrow, FaBatteryFull, FaNetworkWired, FaMemory, FaMicrochip, FaRegClock, FaGlobe } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 import axios from "axios";
 import { Helmet } from "react-helmet";
-import "react-toastify/dist/ReactToastify.css"; // Import the toast CSS
+import "react-toastify/dist/ReactToastify.css"; // Import the toast CSS 
 import LoadMoreInfo from "./components/LoadMoreInfo"; // Import the new component
 
 const App = () => {
@@ -119,7 +120,19 @@ const App = () => {
   return (
     <>
       <Helmet>
-        <title>Device Info</title>
+        <title>Device Information</title>
+        <meta name="description" content="Get detailed information about your device, including browser, OS, IP address, battery status, geolocation, and more." />
+        <meta name="keywords" content="device info, browser details, operating system, battery status, geolocation, screen resolution" />
+        <meta name="author" content="Your Name" />
+        <meta property="og:title" content="Device Information" />
+        <meta property="og:description" content="Explore the detailed device information such as IP address, browser, battery status, and more." />
+        <meta property="og:image" content="https://your-site.com/your-image.jpg" />
+        <meta property="og:url" content="https://your-site.com" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:creator" content="@your-twitter-handle" />
+        <meta name="twitter:title" content="Device Information" />
+        <meta name="twitter:description" content="Detailed device info including browser, OS, IP, and more." />
+        <meta name="twitter:image" content="https://your-site.com/your-image.jpg" />
       </Helmet>
 
       <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
@@ -198,37 +211,24 @@ const App = () => {
             <div className="flex items-center space-x-3">
               <FaNetworkWired className="text-2xl text-gray-600" />
               <div className="text-lg">
-                <strong>Network Type:</strong> {deviceInfo.networkType || "Unknown"}
+                <strong>Network Type:</strong> {deviceInfo.networkType || "Loading..."}
               </div>
             </div>
 
-            <div className="flex items-center space-x-3">
-              <FaLocationArrow className="text-2xl text-gray-600" />
-              <div className="text-lg">
-                <strong>Geolocation:</strong> {deviceInfo.geolocation || "Fetching..."}
-              </div>
-            </div>
-
-            {/* Load More Info Button */}
-            {showMoreInfo && (
-              <>
-                <LoadMoreInfo deviceInfo={deviceInfo} />
-              </>
-            )}
-          </div>
-
-          <div className="mt-6 text-center">
+            {/* Show More Info */}
             <button
+              className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4"
               onClick={() => setShowMoreInfo(!showMoreInfo)}
-              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
             >
-              {showMoreInfo ? "Show Less" : "Load More"}
+              {showMoreInfo ? "Show Less Info" : "Show More Info"}
             </button>
+
+            {showMoreInfo && <LoadMoreInfo deviceInfo={deviceInfo} />}
           </div>
         </div>
-
-        <ToastContainer />
       </div>
+
+      <ToastContainer />
     </>
   );
 };
