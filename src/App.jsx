@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { isMobile, isTablet, isDesktop, browserName, osName, osVersion, isChrome, isFirefox } from "react-device-detect";
 import { FaWifi, FaDesktop, FaMobileAlt, FaInfoCircle } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
-import ReactTooltip from "react-tooltip";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import "react-toastify/dist/ReactToastify.css"; // Import the toast CSS
