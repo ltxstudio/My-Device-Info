@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaDesktop, FaMobileAlt, FaMoon, FaSun, FaWifi } from "react-icons/fa";
+import { FaMoon, FaSun } from "react-icons/fa";
 import { Helmet } from "react-helmet";
 import { ToastContainer, toast } from "react-toastify";
 import { isMobile, isTablet, browserName, osName } from "react-device-detect";
@@ -107,11 +107,6 @@ function App() {
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
     localStorage.setItem("isDarkMode", JSON.stringify(newMode));
-  };
-
-  // Copy text to clipboard
-  const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text).then(() => toast.success("Copied to Clipboard!"));
   };
 
   return (
