@@ -253,6 +253,7 @@ const App = () => {
               {showMoreInfo ? "Show Less" : "Load More"}
             </button>
           </div>
+          {showMoreInfo && <LoadMoreInfo deviceInfo={deviceInfo} />}
 
         </div>
 
